@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gestion_locateur/Url.dart';
 import 'package:get/get.dart';
@@ -6,12 +8,19 @@ import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class Registercontroller extends GetxController {
-  late BuildContext context;
-  register(var email, var password) async {
-    Map<String, Object> login = {"email": email, "password": password};
+  late bool l = false;
+  register(BuildContext context, TextEditingController email,
+      TextEditingController password, TextEditingController tel) async {
+    Map<String, Object> body = {
+      "email": email.text,
+      "tel": tel.text,
+      "password": password.text
+    };
     final Map<String, String> headers = {'Content-Type': 'application/json'};
     var rep = await http.post(Uri.parse("${Url().url}/Api/auth/register"),
-        body: login, headers: headers);
+        body: jsonEncode(body), headers: headers);
+    l = true;
+    update();
     if (rep.statusCode != 200) {
       AwesomeDialog(
         context: context,
@@ -19,6 +28,15 @@ class Registercontroller extends GetxController {
         animType: AnimType.rightSlide,
         title: 'Error',
         desc: "cette email a d'èja pris",
+        btnOkOnPress: () {},
+      ).show();
+    } else {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        animType: AnimType.rightSlide,
+        title: 'Success',
+        desc: "Utilisateur crée avec success",
         btnOkOnPress: () {},
       ).show();
     }

@@ -11,117 +11,119 @@ class Loginview extends StatelessWidget {
   final Logincontroller controller = Get.put(Logincontroller());
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Login",
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 31, color: Colors.white),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Email",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: email,
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[850],
-                    hintText: "Entrer ton Email",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(10),
-                    )),
-              )
-            ],
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Login",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 31, color: Colors.white),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Mot de pass",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: pass,
-                obscureText: true,
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[850],
-                    hintText: "Entrer ton mot de pass",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(10),
-                    )),
-              )
-            ],
-          ),
-        ),
-        SizedBox(height: 20),
-        ElevatedButton(
-            onPressed: () {
-              if (email.text.isEmpty) {
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.error,
-                  animType: AnimType.rightSlide,
-                  title: 'Erreur',
-                  desc: 'Email est obligatoire',
-                  btnOkOnPress: () {},
-                ).show();
-              } else if (pass.text.isEmpty) {
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.error,
-                  animType: AnimType.rightSlide,
-                  title: 'Erreur',
-                  desc: 'mot de pass est obligatoire',
-                  btnOkOnPress: () {},
-                ).show();
-              } else {
-                controller.login(email, pass);
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              minimumSize: Size(double.infinity, 50),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Email",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: email,
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[850],
+                      hintText: "Entrer ton Email",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                )
+              ],
             ),
-            child: Text("Login"))
-      ],
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Mot de pass",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: pass,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[850],
+                      hintText: "Entrer ton mot de pass",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+              onPressed: () {
+                if (email.text.isEmpty) {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.error,
+                    animType: AnimType.rightSlide,
+                    title: 'Erreur',
+                    desc: 'Email est obligatoire',
+                    btnOkOnPress: () {},
+                  ).show();
+                } else if (pass.text.isEmpty) {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.error,
+                    animType: AnimType.rightSlide,
+                    title: 'Erreur',
+                    desc: 'mot de pass est obligatoire',
+                    btnOkOnPress: () {},
+                  ).show();
+                } else {
+                  controller.login(context, email, pass);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                minimumSize: Size(double.infinity, 50),
+              ),
+              child: Text("Login"))
+        ],
+      ),
     );
   }
 }

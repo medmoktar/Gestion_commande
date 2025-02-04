@@ -1,25 +1,32 @@
 import 'dart:async';
-
+import 'package:get/get.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:gestion_locateur/Ajoutmeson/AjoutController.dart';
+import 'package:gestion_locateur/UserUpdateMaison/Updatecontroller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:get/get.dart';
 
-// ignore: must_be_immutable
-class Ajouterview extends StatelessWidget {
-  final int id;
-  Ajouterview({super.key, required this.id});
-
-  TextEditingController localisation = TextEditingController();
-  TextEditingController prix = TextEditingController();
-  TextEditingController description = TextEditingController();
-  final Ajoutcontroller controller = Get.put(Ajoutcontroller());
+class Updateview extends StatelessWidget {
+  const Updateview({super.key});
 
   @override
   Widget build(BuildContext context) {
     final Completer<GoogleMapController> controler =
         Completer<GoogleMapController>();
+    TextEditingController localisation = TextEditingController();
+    TextEditingController prix = TextEditingController();
+    TextEditingController description = TextEditingController();
+    final Updatecontroller controller = Get.put(Updatecontroller());
+    final Map<String, dynamic> L = Get.arguments;
+    localisation.text = L['localisation'];
+    prix.text = L['prix'].toString();
+    description.text = L['description'];
+    late List images = L['images'];
+    late var id = L['id'];
+    var position = LatLng(L['altitude'], L['longitude']);
+    Future.delayed(Duration.zero, () {
+      controller.new_position(position, controler);
+    });
+
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -28,7 +35,7 @@ class Ajouterview extends StatelessWidget {
           child: Icon(Icons.my_location),
         ),
         appBar: AppBar(
-          title: Text("6".tr, style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text("19".tr, style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -45,7 +52,7 @@ class Ajouterview extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              GetBuilder<Ajoutcontroller>(
+              GetBuilder<Updatecontroller>(
                 builder: (c) {
                   return Container(
                     height: 400,
@@ -81,7 +88,7 @@ class Ajouterview extends StatelessWidget {
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () => controller.pickImages(),
+                  onPressed: () => controller.pickeimage(),
                   child: Column(
                     children: [
                       Text("10".tr),
@@ -95,34 +102,43 @@ class Ajouterview extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              GetBuilder<Ajoutcontroller>(builder: (c) {
+              GetBuilder<Updatecontroller>(builder: (c) {
                 return Wrap(
                     spacing: 10,
                     runSpacing: 10,
-                    children: List.generate(c.images.length, (i) {
-                      return Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Image.file(
-                            c.images[i],
-                            fit: BoxFit.cover,
-                            height: 100,
-                            width: 110,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              c.remove(i);
-                            },
-                            child: Container(
-                              color: Colors.red,
-                              child: Icon(
-                                Icons.close,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        ],
-                      );
+                    children: List.generate(
+                        c.images.isEmpty ? images.length : c.images.length,
+                        (i) {
+                      return c.images.isEmpty
+                          ? Image.network(
+                              images[i].toString(),
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: 110,
+                            )
+                          : Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                Image.file(
+                                  c.images[i],
+                                  fit: BoxFit.cover,
+                                  height: 100,
+                                  width: 110,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    c.remove(i);
+                                  },
+                                  child: Container(
+                                    color: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
                     }));
               }),
               SizedBox(
@@ -132,8 +148,7 @@ class Ajouterview extends StatelessWidget {
                   onPressed: () {
                     if (localisation.text.isEmpty ||
                         prix.text.isEmpty ||
-                        description.text.isEmpty ||
-                        controller.images.isEmpty) {
+                        description.text.isEmpty) {
                       AwesomeDialog(
                         context: context,
                         dialogType: DialogType.error,
@@ -145,10 +160,6 @@ class Ajouterview extends StatelessWidget {
                     } else {
                       controller.sendData(
                           context, id, localisation, prix, description);
-                      localisation.text = "";
-                      prix.text = "";
-                      description.text = "";
-                      controller.images = [];
                     }
                   },
                   style: ElevatedButton.styleFrom(

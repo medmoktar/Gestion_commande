@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestion_locateur/translate/TranslationContrller.dart';
 import 'package:get/get.dart';
 
 class Settingview extends StatelessWidget {
@@ -6,22 +7,35 @@ class Settingview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Translationcontrller controller = Get.find();
     return Scaffold(
-      body: ListView(
-        children: [
-          Center(
-            child: MaterialButton(
-              onPressed: () {
-                Get.toNamed("/AuthenticationView");
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              color: Colors.amberAccent,
-              textColor: Colors.black,
-              child: Text("Connecter"),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 100),
+        child: ListView(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  controller.changelangue("fr");
+                },
+                child: Text("Français")),
+            SizedBox(
+              height: 10,
             ),
-          )
-        ],
+            ElevatedButton(
+                onPressed: () {
+                  controller.changelangue("ar");
+                },
+                child: Text("العربية")),
+            SizedBox(
+              height: 100,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Get.toNamed("/login");
+                },
+                child: Text("Connecter"))
+          ],
+        ),
       ),
     );
   }

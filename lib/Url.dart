@@ -1,3 +1,3 @@
 class Url {
-  String url = "localhost:9090";
+  String url = "http://192.168.100.11:9000";
 }
